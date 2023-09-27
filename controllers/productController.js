@@ -7,7 +7,7 @@ const fetchProductsByCategory= asyncHandler(async(req, res)=>{
     try{
      const category = req.params.category
         // console.log('category',category)
-     const products = await Products.find({category:category})
+     const products = await Products.find({category:category}).sort({price:-1})
      res.status(201).json(products)
     }catch(err){
         console.log(err)
