@@ -50,9 +50,17 @@ const updatePrice =asyncHandler(async(req,res)=>{
 try{
  const data = req.body
 //  console.log(data)
- data.map(async(product)=>{
-  await products.findByIdAndUpdate(product._id,{price:product.price})
- })
+//  data.map(async(product)=>{
+//   await products.findByIdAndUpdate(product._id,{price:product.price})
+//  })
+const bulkUpdateOps = data.map((product) => ({
+  updateOne: {
+    filter: { _id: product._id },
+    update: { $set: { price: product.price } },
+  },
+}));
+
+await products.bulkWrite(bulkUpdateOps);
  res.status(201).json({message:"price updated"})
 }catch(err){
   console.log(err)
